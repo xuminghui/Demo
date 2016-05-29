@@ -18,6 +18,7 @@ import com.example.service.PersonService;
 import com.example.web.config.Config; 
 
 @RestController
+@RequestMapping("/persons")
 public class PersonController {
 	
 	@Autowired
@@ -30,7 +31,7 @@ public class PersonController {
 		System.out.println(personRepository);
 		return personService.findOnePerson(userName);
 	}
-	@RequestMapping(method=RequestMethod.POST,path="/save")
+	@RequestMapping(method=RequestMethod.POST,path="save")
 	public Person save(@Valid Person person){
 		return personRepository.save(person);
 	}
@@ -40,10 +41,10 @@ public class PersonController {
 	public Person getPersonByUserNameAndEmail(String userName,String email){
 		return personRepository.findByUserNameAndEmail(userName, email);
 	}
-	@RequestMapping("/{id}")
+	/*@RequestMapping("/{id}")
 	public Person queryById(@PathVariable Long id){
 		return personRepository.findById(id);
-	}
+	}*/
 	
 	@RequestMapping("/page")
 	public Page<Person> page(Person person){

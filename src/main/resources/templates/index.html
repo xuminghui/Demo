@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8"></meta>
+<title>person Info</title>
+</head>
+<body>
+	<div>
+		<form action="/" th:action="@{/persons/save}" method="post">
+		<div><input type="text" name="userName" ></input><label for="userName">用户名：</label></div>
+		<div><label>密码：</label><input type="text" name="password" ></input></div>
+		<div><label>邮箱：</label><input type="text" name="email" ></input></div>
+		<div><input type="submit" name="submit" th:value="save"></input></div>
+		</form>
+	</div>
+</body>
+</html>

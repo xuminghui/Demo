@@ -1,11 +1,13 @@
 package com.example.web.config;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.format.FormatterRegistry;
 @Configuration
 @PropertySource("classpath:config/Config.properties")
 public class Config {
@@ -18,8 +20,5 @@ public class Config {
 	public void setPageSize(int pageSize){ 
 		PAGE_SIZE=pageSize;
 	}
-	/*@Bean
-	public RestTemplate restTemplate(){
-		return new RestTemplate();
-	}*/
+	
 }

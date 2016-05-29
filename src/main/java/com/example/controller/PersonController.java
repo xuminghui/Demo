@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +16,8 @@ import com.example.entity.Person;
 import com.example.repository.PersonRepository;
 import com.example.repository.PersonSpecification;
 import com.example.service.PersonService;
-import com.example.web.config.Config; 
+import com.example.web.config.Config;
+import com.example.web.view.UserSession; 
 
 @RestController
 @RequestMapping("/persons")
@@ -25,6 +27,7 @@ public class PersonController {
 	private PersonService personService;
 	@Autowired
 	private PersonRepository personRepository;
+	
 	
 	@RequestMapping(method=RequestMethod.GET,path="persons/{userName}")
 	public Person getByUserName(@PathVariable String userName){

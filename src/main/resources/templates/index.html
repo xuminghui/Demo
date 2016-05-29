@@ -7,10 +7,11 @@
 </head>
 <body>
 	<div>
-		<form action="/" th:action="@{/persons/save}" method="post">
-		<div><input type="text" name="userName" ></input><label for="userName">用户名：</label></div>
-		<div><label>密码：</label><input type="text" name="password" ></input></div>
-		<div><label>邮箱：</label><input type="text" name="email" ></input></div>
+		<form action="/" th:action="@{/persons/save}" method="post" th:object="${person}">
+		<div><label for="userName">用户名：</label><input type="text" name="userName" th:field="${person.userName}"></input></div>
+		<div><label>密码：</label><input type="text" name="password"  th:field="${person.password}"></input></div>
+		<div><label>邮箱：</label><input type="text" name="email"  th:field="${person.email}"></input></div>
+		<div><label>出生日期：</label><input type="text" name="birth"  th:field="${person.birth}" th:value="${person.birth}"></input></div>
 		<div><input type="submit" name="submit" th:value="save"></input></div>
 		</form>
 	</div>

@@ -36,7 +36,7 @@ public class PersonController {
 	}
 	@RequestMapping(method=RequestMethod.POST,path="save")
 	public Person save(@Valid Person person){
-		return personRepository.save(person);
+		return personService.save(person);
 	}
 	
 	

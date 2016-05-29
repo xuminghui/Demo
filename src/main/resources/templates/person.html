@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>person Info</title>
+</head>
+<body>
+	<div>
+		<form th:action="@{/save}" method="post" >
+			<div>
+				<input type="text"  name="userName"/>
+			</div>
+			<div>
+				<input type="text"  name="email" />
+			</div>
+			<div>
+				<input type="text"  name="password" />
+			</div>
+			<div>
+				<button type="submit"
+					name="upload" th:text="save">
+					Save
+				</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

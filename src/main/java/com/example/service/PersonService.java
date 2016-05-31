@@ -18,7 +18,7 @@ public class PersonService {
 		person.setUserName(userName);
 		return personRepository.findOne(PersonSpecification.queryByProperties(person));
 	}
-	@Secured("ROLE_USER")
+	//@Secured("ROLE_USER")
 	public Person save(Person person){
 		return personRepository.save(person);
 	}

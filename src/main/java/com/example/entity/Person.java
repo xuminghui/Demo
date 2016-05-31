@@ -24,7 +24,9 @@ public class Person {
 	@NotNull
 	private String password;
 	@NotNull
-	@Email
+	private String role;
+	//@NotNull
+	//@Email
 	private String email;
 	@Temporal(TemporalType.DATE)
 	private Date birth;
@@ -65,6 +67,14 @@ public class Person {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public String getEmail() {

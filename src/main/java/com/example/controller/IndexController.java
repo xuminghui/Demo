@@ -13,7 +13,7 @@ import com.example.web.view.UserSession;
 public class IndexController {
 	@Autowired
 	private UserSession userSession;
-	@RequestMapping("/")
+	@RequestMapping("/index")
 	@Secured("ROLE_USER")
 	public String getByUserName(Person person){
 		return "index";

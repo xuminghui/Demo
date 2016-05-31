@@ -33,7 +33,8 @@ public class UserController {
 
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public String registration(Person newUser) {
-		
+		if(1==1)
+		throw new RuntimeException("1111");
 		try {
 			if (personDao.findByUserName(newUser.getUserName())!=null) {
 				return "redirect:" + "/login?registration&error";

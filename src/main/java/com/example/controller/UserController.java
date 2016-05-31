@@ -1,8 +1,7 @@
 package com.example.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,12 +21,13 @@ public class UserController {
 
 	// handle when logged user go to login page
 	@RequestMapping("/login")
+	
 	public String login() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth instanceof AnonymousAuthenticationToken) {
 			return "login";
 		} else {
-			return "home";
+			return "home"; 
 		}
 	}
 
@@ -38,7 +38,7 @@ public class UserController {
 			if (personDao.findByUserName(newUser.getUserName())!=null) {
 				return "redirect:" + "/login?registration&error";
 			} else {
-				newUser.setRole(ROLE.ADMIN.toString());
+				newUser.setRole("ROLE_TEST");
 				personDao.save(newUser);
 				
 				return "redirect:" + "/login?registration&success";

@@ -1,6 +1,9 @@
 package com.example.controller;
 
 import java.awt.Color;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;
@@ -45,5 +48,19 @@ public class CheckCodeController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	@RequestMapping(value = "/testImg", produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public void getImgCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream("F:\\TOOL\\workspace\\demo\\src\\main\\resources\\static\\img\\background.png"));
+		BufferedOutputStream os=new BufferedOutputStream(response.getOutputStream());
+		int i;
+		while((i=in.read())!=-1){
+		os.write(i);
+		}
+		
+		os.flush(); 
+		os.close();
+		in.close();
 	}
 }

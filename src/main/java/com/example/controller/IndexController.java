@@ -14,7 +14,7 @@ public class IndexController {
 	@Autowired
 	private UserSession userSession;
 	@RequestMapping("/index")
-	@Secured("ROLE_USER")
+	@Secured("ROLE_ADMIN")
 	public String getByUserName(Person person){
 		return "index";
 	}

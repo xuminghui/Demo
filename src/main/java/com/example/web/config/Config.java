@@ -4,25 +4,34 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
 @Configuration
-@PropertySource("classpath:config/Config.properties")
+@ConfigurationProperties(prefix="author",locations={"classpath:config/Config.properties"})
 public class Config {
-	public static int PAGE_SIZE;
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertyConfigure(){
-		return new PropertySourcesPlaceholderConfigurer();
-	}
-	@Value("${page.size}")
-	public void setPageSize(int pageSize){ 
-		PAGE_SIZE=pageSize;
-	}
+	
+	private String name;
+	private Long age;
 	
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Long getAge() {
+		return age;
+	}
+
+	public void setAge(Long age) {
+		this.age = age;
+	}
+
+
 	@Value("classpath:config/Config.properties")
 	private Resource testFile;
 	
@@ -33,6 +42,9 @@ public class Config {
 		try {
 			System.out.println(IOUtils.toString(testFile.getInputStream()));
 			System.out.println(IOUtils.toString(testURL.getInputStream()));
+			System.out.println("age:" +age);
+			System.out.println("name: "+name);
+			System.out.println("pageSize: "+PageConfig.PAGE_SIZE);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

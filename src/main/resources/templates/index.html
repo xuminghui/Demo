@@ -12,6 +12,7 @@
 		<div><label>密码：</label><input type="text" name="password"  th:field="${person.password}"></input></div>
 		<div><label>邮箱：</label><input type="text" name="email"  th:field="${person.email}"></input></div>
 		<div><label>出生日期：</label><input type="text" name="birth"  th:field="${person.birth}" th:value="${person.birth}"></input></div>
+		<div><label>验证码：</label><input type="text" name="checkCode"></input><img id="imgObj" alt="验证码" src="/init/InitRegValCode" /></div>
 		<div><input type="submit" name="submit" th:value="save"></input></div>
 		</form>
 	</div>

@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,18 +10,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.entity.Person;
 import com.example.repository.PersonRepository;
-import com.example.repository.UserDetailsDao.ROLE;
+import com.example.web.config.Config;
 
 @Controller
 public class UserController {
 
 	@Autowired
 	PersonRepository personDao;
-
+	@Autowired
+	Config config;
 	// handle when logged user go to login page
 	@RequestMapping("/login")
 	
 	public String login() {
+		config.output();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth instanceof AnonymousAuthenticationToken) {
 			return "login";

@@ -2,6 +2,9 @@ package com.example.web.config;
 
 import java.time.LocalDate;
 
+import javax.servlet.Filter;
+
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -37,5 +40,22 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(demoInterceptor());
 	}
+	@Bean
+	public FilterRegistrationBean someFilterRegistration() {
+
+	    FilterRegistrationBean registration = new FilterRegistrationBean();
+	    registration.setFilter(someFilter());
+	    registration.addUrlPatterns("/login");
+	    registration.addInitParameter("paramName", "paramValue");
+	    registration.setName("someFilter");
+	    registration.setOrder(1);
+	    return registration;
+	} 
+
+	@Bean(name = "someFilter")
+	public Filter someFilter() {
+	    return new SomeFilter();
+	}
+	
 
 }

@@ -1,37 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<include resource="org/springframework/boot/logging/logback/base.xml" />
-	<appender name="com_example"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<!-- <Encoding>UTF-8</Encoding> -->
-		<file>../logs/com_example.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>../logs/%d{yyyyMMdd}/trade_ice_other_%i.log</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>50MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy> 
-		</rollingPolicy>
-		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>[trade_ice]%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{UUID}] %msg%n</pattern>
-		</layout>
-	</appender>
-	<appender name="async_com_example" class="ch.qos.logback.classic.AsyncAppender">
-		<discardingThreshold>0</discardingThreshold>
-		<queueSize>512</queueSize>
-		<appender-ref ref="com_example" />
-	</appender>
-	
-	<logger name="com.example" additivity="false">
-		<level value="${level}"></level>
-		<appender-ref ref="async_com_example"></appender-ref>
-	</logger>
+
+	<include resource="org/springframework/boot/logging/logback/base.xml" /> 
 	<springProfile name="staging">
 		<logger name="com.example" level="TRACE"></logger>
 	</springProfile>
-	<springProperty scope="context" name="level"
-		source="com.example.level"></springProperty>
-		
 	
-
+	<logger name="com.example" additivity="false">
+		<level value="error"></level>
+		<appender-ref ref="FILE"></appender-ref>
+	</logger>
 </configuration>

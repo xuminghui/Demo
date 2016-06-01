@@ -12,7 +12,7 @@ public class LogbackApplicationTests {
 
 	@Test
 	public void testLoadedCustomLogbackConfig() throws Exception {
-		DemoApplication.main(new String[0]);
+		DemoApplication.main(new String[0]); 
 		this.outputCapture.expect(containsString("Sample Debug Message"));
 		this.outputCapture.expect(not(containsString("Sample Trace Message")));
 	}

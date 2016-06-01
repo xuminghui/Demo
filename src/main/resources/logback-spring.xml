@@ -5,9 +5,5 @@
 	<springProfile name="staging">
 		<logger name="com.example" level="TRACE"></logger>
 	</springProfile>
-	
-	<logger name="com.example" additivity="false">
-		<level value="error"></level>
-		<appender-ref ref="FILE"></appender-ref>
-	</logger>
+	<logger name="com.example" level="error"></logger>
 </configuration>

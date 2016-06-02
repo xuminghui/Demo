@@ -22,6 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.example.entity.Person;
 import com.example.repository.PersonRepository;
+import com.example.service.MailService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = DemoApplication.class)
@@ -30,6 +31,8 @@ import com.example.repository.PersonRepository;
 public class PersonTests {
 	@Autowired
 	private PersonRepository personRepository;
+	@Autowired
+	private MailService mailService;
 	@Test
 	public void savePersons(){
 		System.out.println("setup");
@@ -49,6 +52,11 @@ public class PersonTests {
 		Page<Person> pagePeople=personRepository.findAll(null,new PageRequest(1,2));
 		List<Person> list=pagePeople.getContent();
 		System.out.println(list.get(0).getId());
+	}
+	
+	@Test
+	public void testMail(){
+		mailService.send();
 	}
 	public static void main(String[] args) throws Exception{
 		ConfigurableCaptchaService cs = new ConfigurableCaptchaService();

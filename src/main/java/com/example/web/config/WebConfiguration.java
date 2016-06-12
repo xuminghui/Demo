@@ -21,6 +21,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("home"); 
 		registry.addViewController("/profile").setViewName("profile"); 
+		registry.addViewController("/test").setViewName("testAngular"); 
 	}
 
 	@Override

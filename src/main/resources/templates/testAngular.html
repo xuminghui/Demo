@@ -1,0 +1,21 @@
+<!doctype html>
+<html   ng-app="app">
+<head>
+<title>Bookshop - Your Online Bookshop</title>
+<script type="text/javascript"
+		src="webjars/angular/1.5.6/angular.min.js"></script>
+<script type="text/javascript">
+		angular.module('app',[]).controller('MyController',function ($scope) {
+			$scope.name="hello world";
+		})
+		
+	</script>
+</head>
+<body>
+	<div ng-controller="MyController">
+		<input type="text" ng-model="name" ></input>
+	</div>
+	
+	
+</body>
+</html>

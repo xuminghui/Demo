@@ -5,16 +5,37 @@
 <script type="text/javascript"
 		src="webjars/angular/1.5.6/angular.min.js"></script>
 <script type="text/javascript">
-		angular.module('app',[]).controller('MyController',function ($scope) {
+		angular.module('app',[]).controller('MyController',['$scope','$http',function ($scope,$http) {
 			$scope.name="hello world";
-		})
+			var promise=$http({
+				method:'get',
+				url:'http://localhost:8081/testAjax',
+				//timeout:6000  //具体参看文档
+				cache:true
+			});
+			alert(111);
+			
+			promise.then(function(response){
+				alert(response.data.id+' '+response.data.name);
+			},function(response){
+				alert(response.status);
+			});
+		}]);
+		
+		
+		
 		
 	</script>
+	
+	
 </head>
 <body>
 	<div ng-controller="MyController">
 		<input type="text" ng-model="name" ></input>
+		<div>{{name}}</div>
 	</div>
+	
+
 	
 	
 </body>

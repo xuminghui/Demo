@@ -8,13 +8,19 @@ public class TestController {
 	@RequestMapping("/testAjax")
 	@ResponseBody
 	public  Ticket showData(){
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Ticket ticket=new Ticket();
 		ticket.setId("1");
 		ticket.setName("name");
 		return ticket;
 	}
 	@RequestMapping("/testAjax2")
-	public  String testAngular(){
+	public  String testAngular(){ 
 		return "testAngular";
 	}
 	public static class Ticket{

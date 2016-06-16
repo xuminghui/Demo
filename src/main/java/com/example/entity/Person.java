@@ -32,13 +32,13 @@ public class Person {
 	private Date birth;
 	
 	@CreationTimestamp   
-	@Column(updatable=false)
+	@Column(updatable=false) 
 	private Date createdTime;//每次插入时，都会执行；更新时，不执行
 	
 	
 	public Person() {
 	}
-
+ 
 	public Person(String userName, String password, String email) {
 		this.userName = userName;
 		this.password = password;

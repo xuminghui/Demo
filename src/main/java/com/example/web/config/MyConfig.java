@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 @Configuration
 @ConfigurationProperties(prefix="author",locations={"classpath:config/Config.properties"})
-public class Config {
-	
+public class MyConfig {
+	public MyConfig(){
+		System.out.println("12344555");
+	}
 	private String name;
 	private Long age;
 	

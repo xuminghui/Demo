@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.entity.Person;
 import com.example.repository.PersonRepository;
-import com.example.web.config.Config;
+import com.example.web.config.MyConfig;
 
 @Controller
 public class UserController {
@@ -18,10 +18,9 @@ public class UserController {
 	@Autowired
 	PersonRepository personDao;
 	@Autowired
-	Config config;
+	MyConfig config;
 	// handle when logged user go to login page
 	@RequestMapping("/login")
-	
 	public String login() {
 		config.output();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

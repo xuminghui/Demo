@@ -7,10 +7,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.example.repository.UserDetailsDao;
-import com.example.repository.UserDetailsDao.ROLE;
 
 @Configuration
 @EnableWebSecurity
@@ -19,9 +20,12 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsDao  userDetailDao;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable();
 		http.authorizeRequests().antMatchers("/login").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax2").permitAll();
+		http.authorizeRequests().antMatchers("/writers").permitAll();
+		http.authorizeRequests().antMatchers("/books").permitAll();
 		http.authorizeRequests().antMatchers("/registration").permitAll();
 		http.authorizeRequests().antMatchers("/test").permitAll();
 	//	http.authorizeRequests().antMatchers("/").hasRole(ROLE.ADMIN.getRole()); 
@@ -45,6 +49,12 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 		/*auth.inMemoryAuthentication().withUser("user").password("password").roles("USER").and().withUser("admin")
 				.password("password").roles("USER", "ADMIN");*/
 		auth.userDetailsService(userDetailDao);
+	}
+	private CsrfTokenRepository csrfTokenRepository() 
+	{ 
+	    HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository(); 
+	    repository.setSessionAttributeName("_csrf");
+	    return repository; 
 	}
 
 }

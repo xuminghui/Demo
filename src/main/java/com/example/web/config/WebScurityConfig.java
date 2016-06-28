@@ -20,6 +20,7 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsDao  userDetailDao;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		//http.csrf().csrfTokenRepository(csrfTokenRepository());
 		http.csrf().disable();
 		http.authorizeRequests().antMatchers("/login").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax").permitAll();
@@ -50,6 +51,8 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 				.password("password").roles("USER", "ADMIN");*/
 		auth.userDetailsService(userDetailDao);
 	}
+	
+	//实现方式http.csrf().csrfTokenRepository(csrfTokenRepository());
 	private CsrfTokenRepository csrfTokenRepository() 
 	{ 
 	    HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository(); 

@@ -22,9 +22,12 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		//http.csrf().csrfTokenRepository(csrfTokenRepository());
 		http.csrf().disable();
+		http.headers().frameOptions().disable();
 		http.authorizeRequests().antMatchers("/login").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax2").permitAll();
+		http.authorizeRequests().antMatchers("/console/**").permitAll();
+		
 		http.authorizeRequests().antMatchers("/writers").permitAll();
 		http.authorizeRequests().antMatchers("/books/**").permitAll();
 		http.authorizeRequests().antMatchers("/internal/**").permitAll();

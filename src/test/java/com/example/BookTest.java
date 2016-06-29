@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
@@ -74,25 +75,23 @@ public class BookTest {
 		ObjectMapper mapper = new ObjectMapper();  
         String json = mapper.writeValueAsString(requestBook); 
         System.out.println(json);
-		HttpEntity<String> formEntity = new HttpEntity<String>(json, headers);
-		ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/springboot/books/save",
-				formEntity, String.class);
+		HttpEntity<Book> formEntity = new HttpEntity<Book>(requestBook, headers);
+		ResponseEntity<Book> response = restTemplate.postForEntity("http://localhost:" + port + "/springboot/books/save",
+				formEntity, Book.class);
 		Assert.assertNotNull(response.getBody());
-		System.out.println(response.getBody());
 	}
 
 	@Test
 	public void webappBookIsbnApi() {
-		Book book = restTemplate.getForObject("http://localhost:" + port + "/springboot/books/978-1-78528-415-1",
+		Book book = restTemplate.getForObject("http://localhost:" + port + "/springboot/books/getbook/978-1-78528-415-1",
 				Book.class);
 		Assert.assertNotNull(book);
-		// assertEquals("Packt", book.getPublisher().getName());
 	}
 
 	@Test
 	public void webappPublisherApi() throws Exception {
-		mockMvc.perform(get("/publishers/1")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.parseMediaType("application/hal+jso n")))
-				.andExpect(content().string(containsString("Packt"))).andExpect(jsonPath("$.name").value("Packt"));
+		mockMvc.perform(get("/books/getbook/978-1-78528-415-1")).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString()))
+				.andExpect(content().string(containsString("978-1-78528-415-1"))).andDo(MockMvcResultHandlers.print()).andExpect(jsonPath("$.isbn").value("978-1-78528-415-1"));
 	}
 }

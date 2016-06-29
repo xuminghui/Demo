@@ -32,7 +32,6 @@ public class BookController {
 
 	@RequestMapping(value = "getbook/{isbn}", method = RequestMethod.GET)
 	public Book getBook(@PathVariable("isbn") Book book) {
-		System.out.println(book);
 		return book;
 	}
 

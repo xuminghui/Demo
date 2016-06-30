@@ -121,7 +121,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public BookInitRunner initData() {
+	public BookInitRunner initData() { 
 		return new BookInitRunner();
 	}
 

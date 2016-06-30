@@ -29,3 +29,4 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 }
+@interface	UsedForTesting	{} //定义一个专门为测试类标注的注解

@@ -7,5 +7,5 @@ import com.example.entity.Book;
 
 //@RepositoryRestResource(collectionResourceRel = "writers", path = "writers")
 public interface BookRepository extends JpaRepository<Book, String> { 
-
+	Book findByIsbn(String isbn);
 }

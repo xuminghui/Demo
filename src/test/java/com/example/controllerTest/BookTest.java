@@ -1,4 +1,4 @@
-package com.example;
+package com.example.controllerTest;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
@@ -31,16 +31,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.example.DemoApplication;
+import com.example.MockBeansConfig;
 import com.example.entity.Book;
 import com.example.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = DemoApplication.class) // 找到spring
-																	// context配置并加载
+@SpringApplicationConfiguration(classes = {DemoApplication.class,MockBeansConfig.class}) // 找到spring的配置，以及Mock的Repository
 @WebIntegrationTest("server.port:0")
 public class BookTest {
-	public static final int ENTITY_COUNT = 2;
+	public static final int ENTITY_COUNT = 1;
 	@Autowired
 	private WebApplicationContext context;
 	@Autowired
@@ -56,12 +57,6 @@ public class BookTest {
 	@Before
 	public void setupMockMvcAndInitData() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		/*
-		 * List<Book> list = new ArrayList<Book>(); for (int i = 0; i <
-		 * ENTITY_COUNT; i++) { Book book = new Book("978-3-16-148410-" + i,
-		 * "bookName" + i, "author" + i,"remark"+i); list.add(book); }
-		 * repository.save(list);
-		 */
 	}
 
 	@Before
@@ -87,18 +82,19 @@ public class BookTest {
 		headers.setContentType(type);
 		headers.add("Accept", MediaType.APPLICATION_JSON.toString());
 		ObjectMapper mapper = new ObjectMapper();
-		String json = mapper.writeValueAsString(requestBook);
-		System.out.println(json);
-		HttpEntity<Book> formEntity = new HttpEntity<Book>(requestBook, headers);
-		ResponseEntity<Book> response = restTemplate
-				.postForEntity("http://localhost:" + port + "/springboot/books/save", formEntity, Book.class);
+		mapper.findAndRegisterModules();
+		String json=mapper.writeValueAsString(requestBook);
+		HttpEntity<String> formEntity = new HttpEntity<String>(json, headers);
+		ResponseEntity<String> response = restTemplate
+				.postForEntity("http://localhost:" + port + "/springboot/books/save", formEntity, String.class);
+		System.out.println(response.getBody());
 		Assert.assertNotNull(response.getBody());
 	}
 
 	@Test
 	public void webappBookIsbnApi() {
 		Book book = restTemplate
-				.getForObject("http://localhost:" + port + "/springboot/books/getbook/978-1-78528-415-1", Book.class);
+				.getForObject("http://localhost:" + port + "/springboot/books/getbook/isbn1", Book.class);
 		Assert.assertNotNull(book);
 	}
 
@@ -106,7 +102,11 @@ public class BookTest {
 	public void webappGetBookApi() throws Exception {
 		mockMvc.perform(get("/books/getbook/isbn")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString()))
-				.andExpect(content().string(containsString("isbn"))).andDo(MockMvcResultHandlers.print())
-				.andExpect(jsonPath("$.isbn").value("isbn"));
+				.andExpect(content().string(containsString("isbn"))).andDo(MockMvcResultHandlers.print());
+				//.andExpect(jsonPath("$.isbn").value("isbn"));
+	}
+	public static void main(String[] args) throws Exception{
+		Book requestBook = new Book("isbn", "bookName", "author", "remark");
+		
 	}
 }

@@ -20,7 +20,8 @@ public class BookController {
 	// 此处是在禁用了CSRF的功能后调试成功的，在开启情况下如何通过验证，有待于进一步研究
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Book create(@RequestBody Book book) {
-		bookRepository.save(book);
+		System.out.println("22222222222222");
+		//bookRepository.save(book);
 		return book;
 	}
 

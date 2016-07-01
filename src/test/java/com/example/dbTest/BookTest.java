@@ -12,6 +12,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.example.DemoApplication;
@@ -55,6 +59,15 @@ public class BookTest {
 		repository.save(book);
 		book=repository.findByIsbn("isbn1");
 		Assert.assertEquals("author12", book.getAuthor());
+	}
+	
+	@Test
+	public void testPageAndSort(){
+		Pageable pageable=new PageRequest(0,20,Direction.DESC,"isbn");
+		Page<Book> page=repository.findAll(pageable);
+		List<Book> books=page.getContent();
+		Assert.assertEquals(20, books.size());
+		Assert.assertEquals("isbn99", books.get(0).getIsbn());
 	}
 
 	

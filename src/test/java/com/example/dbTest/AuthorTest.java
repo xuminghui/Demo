@@ -21,41 +21,47 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.example.DemoApplication;
 import com.example.entity.Author;
 import com.example.entity.Book;
-import com.example.repository.BookRepository;
+import com.example.repository.AuthorRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {DemoApplication.class}) // 找到spring的配置
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class BookTest {
+public class AuthorTest {
 	public static final int ENTITY_COUNT = 100;
 	@Autowired
-	private BookRepository repository;
+	private AuthorRepository repository;
 
 	@Before
 	public void initData() {
-		List<Book> books=new ArrayList<Book>();
+		List<Author> authors=new ArrayList<Author>();
 		for(int i=0;i<ENTITY_COUNT;i++){
 			Author author=new Author();
 			author.setName("author"+i);
-			Book book=new Book("isbn"+i,"bookName"+i,author,"remark"+i);
-			books.add(book);
+			authors.add(author);
 		}
-		repository.save(books);
+		repository.save(authors);
 	}
 	@After
 	public void deleteData(){
 		repository.deleteAll();
 	}
 	@Test
-	public void testBookCount() throws Exception {
+	public void testAuthorCount() throws Exception {
 		Assert.assertEquals(ENTITY_COUNT, repository.count());
 	}
 	@Test
-	public void testGetBookByIsbn(){
-		Book book=repository.findByIsbn("isbn99");
-		Assert.assertEquals("author99", book.getAuthor().getName());
+	public void testAuthorAll(){
+		List<Author> authors=repository.findAll();
+		Assert.assertEquals(ENTITY_COUNT, authors.size());
 	}
 	@Test
+	public void testAuthorById(){
+		List<Author> authors=repository.findAll();
+		Author temp=authors.get(0);
+		Author author=repository.findOne(temp.getId());
+		Assert.assertEquals(temp.getName(),author.getName());
+	}
+	/*@Test
 	public void testUpdateBook(){
 		Book book=repository.findByIsbn("isbn1");
 		Author author=new Author();
@@ -73,7 +79,7 @@ public class BookTest {
 		List<Book> books=page.getContent();
 		Assert.assertEquals(20, books.size());
 		Assert.assertEquals("isbn99", books.get(0).getIsbn());
-	}
+	}*/
 
 	
 }

@@ -33,6 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.DemoApplication;
 import com.example.MockBeansConfig;
+import com.example.entity.Author;
 import com.example.entity.Book;
 import com.example.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,7 +77,9 @@ public class BookTest {
 
 	@Test
 	public void webappBookSaveApi() throws Exception {
-		Book requestBook = new Book("isbn", "bookName", "author", "remark");
+		Author author=new Author();
+		author.setName("author");
+		Book requestBook = new Book("isbn", "bookName", author, "remark");
 		HttpHeaders headers = new HttpHeaders();
 		MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
 		headers.setContentType(type);
@@ -104,9 +107,5 @@ public class BookTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString()))
 				.andExpect(content().string(containsString("isbn"))).andDo(MockMvcResultHandlers.print());
 				//.andExpect(jsonPath("$.isbn").value("isbn"));
-	}
-	public static void main(String[] args) throws Exception{
-		Book requestBook = new Book("isbn", "bookName", "author", "remark");
-		
 	}
 }

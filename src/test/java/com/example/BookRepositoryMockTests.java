@@ -11,6 +11,7 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.example.entity.Author;
 import com.example.entity.Book;
 import com.example.repository.BookRepository;
 
@@ -24,7 +25,9 @@ public class BookRepositoryMockTests {
 	@Before
 	public void setupPublisherRepositoryMock() {
 		Mockito.when(repository.count()).thenReturn(1L);
-		Book book = new Book("isbnMock","bookNameMock","authorMock","remarkMock");
+		Author author=new Author();
+		author.setName("authorMock");
+		Book book = new Book("isbnMock","bookNameMock",author,"remarkMock");
 		Mockito.when(repository.findByIsbn(Mockito.anyString())).thenReturn(book);
 	}
 	@Test

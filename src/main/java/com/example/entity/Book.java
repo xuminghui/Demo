@@ -2,9 +2,11 @@ package com.example.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,7 +28,8 @@ public class Book {
 	@NotNull
 	private String bookName;
 	@NotNull
-	private String author;
+	@ManyToOne(cascade=CascadeType.ALL)
+	private Author author;
 	
 	@JsonIgnore//此属性表明忽略json转换object 和object转换json
 	private String remark;
@@ -39,7 +42,7 @@ public class Book {
 	public Book(){
 		
 	}
-	public Book(String isbn, String bookName, String author,String remark) {
+	public Book(String isbn, String bookName, Author author,String remark) {
 		this.isbn = isbn;
 		this.bookName = bookName;
 		this.author = author;
@@ -58,10 +61,10 @@ public class Book {
 	public void setBookName(String bookName) {
 		this.bookName = bookName;
 	}
-	public String getAuthor() {
+	public Author getAuthor() {
 		return author;
 	}
-	public void setAuthor(String author) {
+	public void setAuthor(Author author) {
 		this.author = author;
 	}
 	public String getIsbn() {

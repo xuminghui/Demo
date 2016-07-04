@@ -6,6 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import com.example.entity.Book;
 
 //@RepositoryRestResource(collectionResourceRel = "writers", path = "writers")
-public interface BookRepository extends JpaRepository<Book, String> { 
+public interface BookRepository extends JpaRepository<Book, Long> { 
 	Book findByIsbn(String isbn);
 }

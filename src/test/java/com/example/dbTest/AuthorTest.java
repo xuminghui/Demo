@@ -61,25 +61,28 @@ public class AuthorTest {
 		Author author=repository.findOne(temp.getId());
 		Assert.assertEquals(temp.getName(),author.getName());
 	}
-	/*@Test
-	public void testUpdateBook(){
-		Book book=repository.findByIsbn("isbn1");
-		Author author=new Author();
-		author.setName("author12");
-		book.setAuthor(author);
-		repository.save(book);
-		book=repository.findByIsbn("isbn1");
-		Assert.assertEquals("author12", book.getAuthor().getName());
+	@Test
+	public void testUpdateAuthor(){
+		List<Author> authors=repository.findAll();
+		Author temp=authors.get(0);
+		Author author=repository.findOne(temp.getId());
+		
+		author.setName("23456");
+		repository.save(author);
+		
+		author=repository.findOne(temp.getId());
+		Assert.assertEquals("23456", author.getName());
 	}
 	
 	@Test
-	public void testPageAndSort(){
-		Pageable pageable=new PageRequest(0,20,Direction.DESC,"isbn");
-		Page<Book> page=repository.findAll(pageable);
-		List<Book> books=page.getContent();
-		Assert.assertEquals(20, books.size());
-		Assert.assertEquals("isbn99", books.get(0).getIsbn());
-	}*/
+	public void testDeleteAuthor(){
+		List<Author> authors=repository.findAll();
+		Author temp=authors.get(0);
+		Author author=repository.findOne(temp.getId());
+		repository.delete(author);
+		author=repository.findOne(temp.getId());
+		Assert.assertNull(author);
+	}
 
 	
 }

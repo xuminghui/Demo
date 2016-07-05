@@ -122,6 +122,10 @@
 				spring-boot-starter-data-elasticsearch
 			</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

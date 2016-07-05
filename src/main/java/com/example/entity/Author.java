@@ -16,6 +16,12 @@ public class Author {
 	private String name;
 	@OneToMany(mappedBy="author")
 	private Set<Book> books;
+	public Author(){
+		
+	}
+	public Author(String name){
+		this.name=name;
+	}
 	public Long getId() {
 		return id;
 	}

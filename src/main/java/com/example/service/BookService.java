@@ -23,4 +23,8 @@ public class BookService {
 		Page<Book> books=bookRepository.findAll(pageable);
 		return books;
 	}
+
+	public Book getBook(long id) {
+		return bookRepository.findOne(id);
+	}
 }

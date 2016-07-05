@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,6 @@ import com.example.service.BookService;
 @RequestMapping(value="/books")
 public class BookController {
 	@Autowired
-	private BookRepository bookRepository;
-	@Autowired
 	private BookService bookService;
 	// 此处是在禁用了CSRF的功能后调试成功的，在开启情况下如何通过验证，有待于进一步研究
 	@RequestMapping(value = "save", method = RequestMethod.POST)
@@ -31,15 +30,10 @@ public class BookController {
 		return book;
 	}
 
-	/*
-	 * @InitBinder //每一次请求，执行一次，因为propertyEditor是非线程安全的 后续版本使用formatter(线程安全的)
-	 * public void initBinder(WebDataBinder binder) {
-	 * binder.registerCustomEditor(Isbn.class, new IsbnEditor()); }
-	 */
 
-	@RequestMapping(value = "getbook/{isbn}", method = RequestMethod.GET)
-	public Book getBook(@PathVariable("isbn") Book book) {
-		return book;
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	public Book getBook(@PathVariable("id") long id) {
+		return bookService.getBook(id);
 	}
 
 	@RequestMapping(value = "/books/session", method = RequestMethod.GET)
@@ -47,8 +41,8 @@ public class BookController {
 		return request.getSession().getId();
 	}
 	@RequestMapping(value = "bookList", method = RequestMethod.GET)
-	public List<Book> findBookList(@RequestParam("pageNum") int pageNum,@RequestParam("orderBy") String orderby) {
-		Page<Book> pageBooks=bookService.findBooks(pageNum, orderby);
+	public List<Book> findBookList(@RequestParam MultiValueMap<String,String> params) {
+		Page<Book> pageBooks=bookService.findBooks(Integer.valueOf(params.get("pageNum").get(0)), params.get("orderBy").get(0));
 		System.out.println(pageBooks);
 		return pageBooks.getContent();
 	}

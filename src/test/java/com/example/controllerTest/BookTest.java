@@ -1,17 +1,16 @@
 package com.example.controllerTest;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,8 +51,6 @@ public class BookTest {
 	@Autowired
 	private WebApplicationContext context;
 	@Autowired
-	private DataSource ds;
-	@Autowired
 	private BookRepository repository;
 	@Mock
 	private Page<Book> pageBook;
@@ -61,41 +58,21 @@ public class BookTest {
 	private int port;
 	private MockMvc mockMvc;
 	private RestTemplate restTemplate = new TestRestTemplate();
-	private static boolean loadDataFixtures = true;
-
-	@Before
-	public void setupMockMvcAndInitData() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-	}
+	//private static boolean loadDataFixtures = true;  装载特定的数据
 
 	@Before
 	public void initMocks() {
+		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 		MockitoAnnotations.initMocks(this);
 		List<Book> books = new ArrayList<Book>();
 		for (int i = 0; i < 100; i++) {
 			Book book = new Book("isbn" + i, "bookName" + i, new Author("authorName" + i), "remark" + i);
+			book.setId(Long.valueOf(i));
 			books.add(book);
 		}
+		Mockito.when(repository.findOne(Mockito.anyLong())).thenReturn(books.get(0));
 		Mockito.when(pageBook.getContent()).thenReturn(books);
 		Mockito.when(repository.findAll(Mockito.any(Pageable.class))).thenReturn(pageBook);
-		/*
-		 * if (loadDataFixtures) { ResourceDatabasePopulator populator = new
-		 * ResourceDatabasePopulator(
-		 * context.getResource("classpath:/test-data.sql"));
-		 * DatabasePopulatorUtils.execute(populator, ds); loadDataFixtures =
-		 * false; }
-		 */
-	}
-
-	@After
-	public void deleteData() {
-		// repository.deleteAll();
-	}
-
-	// 包含了import.sql和加载的测试test-data.sql中的数据
-	@Test
-	public void contextLoads() {
-		assertEquals(ENTITY_COUNT, repository.count());
 	}
 
 	@Test
@@ -118,30 +95,37 @@ public class BookTest {
 	}
 
 	@Test
-	public void webappBookIsbnApi() {
-		Book book = restTemplate.getForObject("http://localhost:" + port + "/springboot/books/getbook/isbn1",
+	public void webappGetBookApiforTemplate() {
+		Book book = restTemplate.getForObject("http://localhost:" + port + "/springboot/books/0",
 				Book.class);
 		Assert.assertNotNull(book);
+		Assert.assertEquals(Long.valueOf(0), book.getId());
 	}
 
 	@Test
 	public void webappGetBookApi() throws Exception {
-		mockMvc.perform(get("/books/getbook/isbn")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString()))
-				.andExpect(content().string(containsString("isbn"))).andDo(MockMvcResultHandlers.print());
-		// .andExpect(jsonPath("$.isbn").value("isbn"));
+		mockMvc.perform(get("/books/0")).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString())).andDo(MockMvcResultHandlers.print()).andExpect(jsonPath("$.id").value(0));
 	}
 
 	/**
 	 * 通过Mockito进行的一个controller的测试，首先模拟组装数据，不依赖数据库的真实数据。
-	 * 
+	 * 分页查询BookList
 	 * @throws Exception
 	 */
 	@Test
 	public void webappBookListApi() throws Exception {
 		mockMvc.perform(get("/books/bookList").param("pageNum", "1").param("orderBy", "bookName"))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString()))
-				.andDo(MockMvcResultHandlers.print());
-		// .andExpect(jsonPath("$.isbn").value("isbn"));
+				.andDo(MockMvcResultHandlers.print()).andExpect(jsonPath("$[0].isbn").isString()).andExpect(jsonPath("$").isArray());
+		Mockito.verify(repository,Mockito.times(1)).findAll(Mockito.any(Pageable.class));
 	}
+	
+	/*
+	 * if (loadDataFixtures) { ResourceDatabasePopulator populator = new
+	 * ResourceDatabasePopulator(
+	 * context.getResource("classpath:/test-data.sql"));
+	 * DatabasePopulatorUtils.execute(populator, ds); loadDataFixtures =
+	 * false; }
+	 */
 }

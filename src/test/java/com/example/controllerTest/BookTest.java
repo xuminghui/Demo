@@ -1,15 +1,12 @@
 package com.example.controllerTest;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +30,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -58,6 +58,7 @@ public class BookTest {
 	private int port;
 	private MockMvc mockMvc;
 	private RestTemplate restTemplate = new TestRestTemplate();
+	private AsyncRestTemplate asyncTemplate = new AsyncRestTemplate();  
 	//private static boolean loadDataFixtures = true;  装载特定的数据
 
 	@Before
@@ -100,6 +101,31 @@ public class BookTest {
 				Book.class);
 		Assert.assertNotNull(book);
 		Assert.assertEquals(Long.valueOf(0), book.getId());
+	}
+	
+	@Test
+	public void testForAysncRestTemplate() {
+		//调用完后立即返回（没有阻塞）  
+	    ListenableFuture<ResponseEntity<String>> future = asyncTemplate.getForEntity("http://localhost:" + port + "/springboot/books/async", String.class);  
+	    //设置异步回调  
+	    future.addCallback(new ListenableFutureCallback<ResponseEntity<String>>() {  
+	        @Override  
+	        public void onSuccess(ResponseEntity<String> result) {  
+	            System.out.println("======client get result : " + result.getBody());  
+	        }  
+	  
+	        @Override  
+	        public void onFailure(Throwable t) {  
+	            System.out.println("======client failure : " + t);  
+	        }  
+	    });  
+	    System.out.println("==no wait"); 
+	    try {
+			Thread.sleep(100000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Test

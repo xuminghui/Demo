@@ -16,23 +16,28 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.example.DemoApplication;
 import com.example.entity.Author;
 import com.example.entity.Book;
 import com.example.repository.BookRepository;
+import com.example.springDemo.BaseProfile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {DemoApplication.class}) // 找到spring的配置
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@ActiveProfiles("local") //测试使用的Profile
 public class BookTest {
 	public static final int ENTITY_COUNT = 100;
 	@Autowired
 	private BookRepository repository;
-
+	@Autowired
+	private BaseProfile profile;
 	@Before
 	public void initData() {
+		System.out.println(profile);
 		List<Book> books=new ArrayList<Book>();
 		for(int i=0;i<ENTITY_COUNT;i++){
 			Author author=new Author();

@@ -12,15 +12,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.example.DemoApplication;
 import com.example.entity.Author;
-import com.example.entity.Book;
 import com.example.repository.AuthorRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +25,6 @@ public class AuthorTest {
 	public static final int ENTITY_COUNT = 100;
 	@Autowired
 	private AuthorRepository repository;
-
 	@Before
 	public void initData() {
 		List<Author> authors=new ArrayList<Author>();

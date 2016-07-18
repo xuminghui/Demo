@@ -27,7 +27,7 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/testAjax").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax2").permitAll();
 		http.authorizeRequests().antMatchers("/console/**").permitAll();
-		
+		http.authorizeRequests().antMatchers("/async").permitAll();
 		http.authorizeRequests().antMatchers("/writers").permitAll();
 		http.authorizeRequests().antMatchers("/books/**").permitAll();
 		http.authorizeRequests().antMatchers("/internal/**").permitAll();

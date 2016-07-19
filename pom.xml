@@ -98,6 +98,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
 			<version>3.2.0</version>
 		</dependency>
@@ -116,23 +120,11 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 			<version>2.7.5</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>
-				spring-boot-starter-data-elasticsearch
-			</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml</artifactId>
-			<version>2.5.1-1</version>
-		</dependency>
-		 -->
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId> 
+			spring-boot-starter-data-elasticsearch </artifactId> </dependency> <dependency> 
+			<groupId>net.sf.ehcache</groupId> <artifactId>ehcache</artifactId> </dependency> 
+			<dependency> <groupId>org.opensaml</groupId> <artifactId>opensaml</artifactId> 
+			<version>2.5.1-1</version> </dependency> -->
 	</dependencies>
 
 	<build>

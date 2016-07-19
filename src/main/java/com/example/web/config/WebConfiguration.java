@@ -48,11 +48,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		registry.addFormatter(new BookFormatter(repository));
 	}
 
-	/*
-	 * @Override public void addResourceHandlers(ResourceHandlerRegistry
-	 * registry) { registry.addResourceHandler("/**").addResourceLocations(
-	 * "classpath:/static/"); }
-	 */
+
 	@Bean
 	public DemoInterceptor demoInterceptor() {
 		return new DemoInterceptor();
@@ -107,7 +103,10 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	public void configurePathMatch(PathMatchConfigurer configurer) {
 		configurer.setUseSuffixPatternMatch(false).setUseTrailingSlashMatch(true);
 	}
-
+	//Spring Boot 默认配置的/**映射到/static（或/public ，/resources，/META-INF/resources）
+	//，/webjars/**会映射到classpath:/META-INF/resources/webjars/。
+	//下面的配置是在默认的基础上增加的额外静态资源的配置
+	//在web页面引用静态资源是相对于上面说的那些路径的。所以写静态资源的时候，不要带上映射的目录名
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/internal/**").addResourceLocations("classpath:/");
@@ -121,7 +120,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public BookInitRunner initData() { 
+	public BookInitRunner initData() {
 		return new BookInitRunner();
 	}
 

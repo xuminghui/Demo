@@ -2,8 +2,13 @@
 <html ng-app="app">
 <head>
 <title>Bookshop - Your Online Bookshop</title>
-<script type="text/javascript"
-	src="webjars/angular/1.5.6/angular.min.js"></script>
+ <!-- <script type="text/javascript"
+	src="webjars/angular/1.5.6/angular.min.js"></script> -->
+	<!-- 下面的这种方式是通过controller来转换资源的位置的  
+	如果有security需要指定忽略的路径web.ignoring().antMatchers("/webjarslocator/**");-->
+ <script type="text/javascript"
+	src="webjarslocator/angular/angular.min.js"></script> 
+	
 <script type="text/javascript">
 	angular.module('app', []).controller('MyController',
 			[ '$scope', '$http', function($scope, $http) {

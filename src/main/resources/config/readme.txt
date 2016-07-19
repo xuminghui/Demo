@@ -1,0 +1,1 @@
+spring会默认从classpath:config目录下查找配置文件信息 

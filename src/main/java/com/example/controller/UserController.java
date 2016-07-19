@@ -7,10 +7,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.entity.Person;
+import com.example.entity.User;
+import com.example.entity.User.OnlyIdView;
 import com.example.repository.PersonRepository;
 import com.example.web.config.MyConfig;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Controller
 public class UserController {
@@ -49,5 +53,16 @@ public class UserController {
 			return "redirect:" + "/login?registration&errorServer";
 		}
 
+	}
+	/**
+	 * 指定json返回的实体数据
+	 * @return
+	 */
+	@RequestMapping("/test/testJsonView")
+	@JsonView(User.OnlyNameView.class)
+	//@JsonView(OnlyIdView.class)
+	@ResponseBody
+	public User testJsonView() {
+		return new User(1l,"xuminghui");
 	}
 }

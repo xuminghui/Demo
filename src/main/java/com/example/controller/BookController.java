@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +28,11 @@ public class BookController {
 	private BookService bookService;
 	// 此处是在禁用了CSRF的功能后调试成功的，在开启情况下如何通过验证，有待于进一步研究
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Book create(@RequestBody Book book) {
-		//bookRepository.save(book);
+	public Book create(@RequestBody @Valid Book book,BindingResult result) {
+		System.out.println("result.getErrorCount(): "+result.getErrorCount());
+		
+		System.out.println(result.getFieldError().getDefaultMessage());
+		//bookRepository.save(book); 
 		return book;
 	}
 

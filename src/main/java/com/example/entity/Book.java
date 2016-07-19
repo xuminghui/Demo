@@ -9,7 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,9 +27,11 @@ public class Book implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@NotNull
+	@NotNull(message="{book.isbn.null}")
 	private String isbn;
-	@NotNull
+	@NotEmpty(message = "{book.name.null}")  
+    @Length(min = 5, max = 20, message = "{book.name.length.illegal}")  
+    @Pattern(regexp = "[a-zA-Z]{5,20}", message = "{book.name.illegal}")  
 	private String bookName;
 	@NotNull
 	@ManyToOne(cascade=CascadeType.ALL)

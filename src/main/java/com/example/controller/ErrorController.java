@@ -9,6 +9,13 @@ public class ErrorController {
 		public String error(){
 			return "error";
 		}
+		@RequestMapping("/test/testError")
+		public String exception() throws Exception{
+			int i=0;
+			if(i==0)
+				throw new Exception();
+			return "error";
+		}
 }
 
 /*@Controller  

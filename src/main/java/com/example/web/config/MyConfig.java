@@ -2,6 +2,8 @@ package com.example.web.config;
 
 import java.io.IOException;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,8 +15,11 @@ public class MyConfig {
 	public MyConfig(){
 		System.out.println("12344555");
 	}
+	//标识这个属性必须存在，如果在配置文件中不存在，则启动报错
+	//@NotNull
 	private String name;
 	private Long age;
+	private String describe;
 	
 	
 	public String getName() {
@@ -33,7 +38,15 @@ public class MyConfig {
 		this.age = age;
 	}
 
+	
+	public String getDescribe() {
+		return describe;
+	}
 
+	public void setDescribe(String describe) {
+		System.out.println(describe);
+		this.describe = describe;
+	}
 	@Value("classpath:config/Config.properties")
 	private Resource testFile;
 	

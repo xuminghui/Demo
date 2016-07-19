@@ -80,7 +80,7 @@ public class BookTest {
 	public void webappBookSaveApi() throws Exception {
 		Author author = new Author();
 		author.setName("author");
-		Book requestBook = new Book("isbn", "bookName", author, "remark");
+		Book requestBook = new Book("isbn", "bookName123456345345", author, "remark");
 		HttpHeaders headers = new HttpHeaders();
 		MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
 		headers.setContentType(type);
@@ -91,7 +91,7 @@ public class BookTest {
 		HttpEntity<String> formEntity = new HttpEntity<String>(json, headers);
 		ResponseEntity<String> response = restTemplate
 				.postForEntity("http://localhost:" + port + "/springboot/books/save", formEntity, String.class);
-		System.out.println(response.getBody());
+		System.out.println(response.getBody()+" "+response.getStatusCode());
 		Assert.assertNotNull(response.getBody());
 	}
 

@@ -1,10 +1,15 @@
 package com.example.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.resource.ResourceUrlProvider;
 @Controller
+@RequestMapping("test")
 public class TestController {
+	@Autowired
+	private  ResourceUrlProvider provider;
 	@RequestMapping("/testAjax")
 	@ResponseBody
 	public  Ticket showData(){
@@ -22,6 +27,12 @@ public class TestController {
 	@RequestMapping("/testAjax2")
 	public  String testAngular(){ 
 		return "testAngular";
+	}
+	@RequestMapping("testVersion")
+	public  String testResourceVersion(){
+		//返回一个经过md5加密的资源名称
+		System.out.println(provider.getForLookupPath("/js123/home.js"));
+		return "testStaticVersionResource";
 	}
 	public static class Ticket{
 		private String id;

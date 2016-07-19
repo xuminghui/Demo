@@ -3,3 +3,4 @@ var Test = {
         alert('test');
     }
 }
+Test.test();

@@ -24,6 +24,7 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.headers().frameOptions().disable();
 		http.authorizeRequests().antMatchers("/login").permitAll();
+		http.authorizeRequests().antMatchers("/test/**").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax").permitAll();
 		http.authorizeRequests().antMatchers("/testAjax2").permitAll();
 		http.authorizeRequests().antMatchers("/console/**").permitAll();
@@ -47,6 +48,7 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers("/css/**");
 		web.ignoring().antMatchers("/img/**");
 		web.ignoring().antMatchers("/js/**");
+		web.ignoring().antMatchers("/js123/**");
 		web.ignoring().antMatchers("/webjarslocator/**");
 	}
 

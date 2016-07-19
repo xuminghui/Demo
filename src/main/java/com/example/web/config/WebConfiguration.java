@@ -21,6 +21,9 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.resource.ContentVersionStrategy;
+import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
+import org.springframework.web.servlet.resource.VersionResourceResolver;
 
 import com.example.BookInitRunner;
 import com.example.formatter.BookFormatter;
@@ -47,7 +50,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		registry.addFormatterForFieldType(LocalDate.class, new LocalDateFormatter());
 		registry.addFormatter(new BookFormatter(repository));
 	}
-
 
 	@Bean
 	public DemoInterceptor demoInterceptor() {
@@ -103,13 +105,20 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	public void configurePathMatch(PathMatchConfigurer configurer) {
 		configurer.setUseSuffixPatternMatch(false).setUseTrailingSlashMatch(true);
 	}
-	//Spring Boot 默认配置的/**映射到/static（或/public ，/resources，/META-INF/resources）
-	//，/webjars/**会映射到classpath:/META-INF/resources/webjars/。
-	//下面的配置是在默认的基础上增加的额外静态资源的配置
-	//在web页面引用静态资源是相对于上面说的那些路径的。所以写静态资源的时候，不要带上映射的目录名
+
+	// Spring Boot 默认配置的/**映射到/static（或/public ，/resources，/META-INF/resources）
+	// ，/webjars/**会映射到classpath:/META-INF/resources/webjars/。
+	// 下面的配置是在默认的基础上增加的额外静态资源的配置
+	// 在web页面引用静态资源是相对于上面说的那些路径的。所以写静态资源的时候，不要带上映射的目录名
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/internal/**").addResourceLocations("classpath:/");
+		VersionResourceResolver versionResourceResolver = new VersionResourceResolver()
+				.addVersionStrategy(new ContentVersionStrategy(), "/**");
+		// registry.addResourceHandler("/internal/**").addResourceLocations("classpath:/")
+		// addResourcehandler:创建一个逻辑路径
+		// addResourceLocations：指定一个具体的位置
+		registry.addResourceHandler("/js123/*.js").addResourceLocations("classpath:/static/js/")
+				.setCachePeriod(60 * 60 * 24 * 365).resourceChain(true).addResolver(versionResourceResolver);
 	}
 
 	@Bean
@@ -118,6 +127,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 			container.setSessionTimeout(1, TimeUnit.MINUTES);
 		};
 	}
+
+	/*@Bean
+	public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
+		return new ResourceUrlEncodingFilter();
+	}*/
 
 	@Bean
 	public BookInitRunner initData() {

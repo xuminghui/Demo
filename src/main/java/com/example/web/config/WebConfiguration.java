@@ -1,6 +1,7 @@
 package com.example.web.config;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.Filter;
@@ -11,18 +12,23 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.resource.ContentVersionStrategy;
-import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
 
 import com.example.BookInitRunner;
@@ -36,7 +42,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 	@Autowired
 	private BookRepository repository;
+	/*@Autowired
+    private MessageSource messageSource;*/
 
+   /* @Override
+    public Validator getValidator() {
+        LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
+        factory.setValidationMessageSource(messageSource);
+        return factory;
+    }*/
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("home");
@@ -53,7 +67,27 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		registry.addFormatterForFieldType(LocalDate.class, new LocalDateFormatter());
 		registry.addFormatter(new BookFormatter(repository));
 	}
-
+	/**
+	 * 国际化配置
+	 * @return
+	 */
+	@Bean
+	public LocaleResolver localeResolver() {
+	    SessionLocaleResolver slr = new SessionLocaleResolver();
+	    slr.setDefaultLocale(Locale.US);
+	    return slr;
+	}
+	/**
+	 * 切换 param设置为lang的值
+	 * @return
+	 */
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+	    LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+	    lci.setParamName("lang");
+	    return lci;
+	}
+	
 	@Bean
 	public DemoInterceptor demoInterceptor() {
 		return new DemoInterceptor();
@@ -62,6 +96,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(demoInterceptor());
+		registry.addInterceptor(localeChangeInterceptor());
 	}
 
 	@Bean

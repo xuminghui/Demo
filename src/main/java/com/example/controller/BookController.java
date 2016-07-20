@@ -5,11 +5,13 @@ import java.util.concurrent.Callable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +30,12 @@ public class BookController {
 	private BookService bookService;
 	// 此处是在禁用了CSRF的功能后调试成功的，在开启情况下如何通过验证，有待于进一步研究
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Book create(@RequestBody @Valid Book book,BindingResult result) {
+	public Book create(@RequestBody @Valid @NotNull(message="12345") Book book,BindingResult result) {
 		System.out.println("result.getErrorCount(): "+result.getErrorCount());
 		
-		System.out.println(result.getFieldError().getDefaultMessage());
+		for(FieldError error:result.getFieldErrors()){
+			System.out.println(error.getField()+" : "+error.getDefaultMessage());
+		}
 		//bookRepository.save(book); 
 		return book;
 	}
@@ -46,6 +50,13 @@ public class BookController {
 	public String getSessionId(HttpServletRequest request) {
 		return request.getSession().getId();
 	}
+	
+	@RequestMapping(value = "testParamValid", method = RequestMethod.GET)
+	public String getParamValid(@NotNull(message="id不能为空") String id) {
+		System.out.println("id: "+id);
+		return "123";
+	}
+	
 	@RequestMapping(value = "bookList", method = RequestMethod.GET)
 	public List<Book> findBookList(@RequestParam MultiValueMap<String,String> params) {
 		Page<Book> pageBooks=bookService.findBooks(Integer.valueOf(params.get("pageNum").get(0)), params.get("orderBy").get(0));
@@ -56,7 +67,7 @@ public class BookController {
 	@RequestMapping(value = "async", method = RequestMethod.GET)
     @ResponseBody
     public Callable<String> callable() {
-		System.out.println("222222222222");
+		System.out.println("callable()");
         // 这么做的好处避免web server的连接池被长期占用而引起性能问题，
         // 调用后生成一个非web的服务线程来处理，增加web服务器的吞吐量。
         return new Callable<String>() {

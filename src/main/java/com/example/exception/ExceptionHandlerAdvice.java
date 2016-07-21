@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ExceptionHandlerAdvice {
 	@ExceptionHandler(value=Exception.class)
 	public ModelAndView exception(Exception exception,WebRequest request){
-		System.out.println("222222");
 		ModelAndView modelAndView=new ModelAndView("Myerror");//error页面
 		modelAndView.addObject("errorMessage", exception.getMessage());
 		return modelAndView;

@@ -1,6 +1,10 @@
 package com.example.entity;
 
-public class Apple {
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Apple implements Serializable{
 	private String name;
 	private String color;
 	public String getName() {

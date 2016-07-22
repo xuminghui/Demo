@@ -34,6 +34,7 @@ public class WebScurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/internal/**").permitAll();
 		http.authorizeRequests().antMatchers("/registration").permitAll();
 		http.authorizeRequests().antMatchers("/test").permitAll();
+		http.authorizeRequests().antMatchers("/testAny").permitAll();
 		http.authorizeRequests().antMatchers("/testContentType/**").permitAll();
 		
 	//	http.authorizeRequests().antMatchers("/").hasRole(ROLE.ADMIN.getRole()); 

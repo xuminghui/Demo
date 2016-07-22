@@ -12,14 +12,12 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
+import org.springframework.http.CacheControl;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.validation.Validator;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -28,13 +26,16 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.mvc.WebContentInterceptor;
 import org.springframework.web.servlet.resource.ContentVersionStrategy;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
 
 import com.example.BookInitRunner;
 import com.example.formatter.BookFormatter;
 import com.example.repository.BookRepository;
+import com.example.web.filter.SomeFilter;
 import com.example.web.interceptor.DemoInterceptor;
+import com.example.web.interceptor.MyInterceptor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -93,11 +94,21 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	public DemoInterceptor demoInterceptor() {
 		return new DemoInterceptor();
 	}
-
+	@Bean
+	public WebContentInterceptor webContentInterceptor() {
+		WebContentInterceptor webContentInterceptor= new MyInterceptor();
+		webContentInterceptor.setCacheSeconds(0);
+		//对于静态资源如何过滤cache-control
+		webContentInterceptor.addCacheMapping(CacheControl.maxAge(1, TimeUnit.HOURS), "/img/*");
+		//webContentInterceptor.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS));
+		
+		return webContentInterceptor;
+	}
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(demoInterceptor());
 		registry.addInterceptor(localeChangeInterceptor());
+		registry.addInterceptor(webContentInterceptor());
 	}
 
 	@Bean
@@ -158,6 +169,10 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		// addResourceLocations：指定一个具体的位置
 		registry.addResourceHandler("/js123/*.js").addResourceLocations("classpath:/static/js/")
 				.setCachePeriod(60 * 60 * 24 * 365).resourceChain(true).addResolver(versionResourceResolver);
+		//通过这个设置可以对静态资源进行缓存过滤 ,这个地方是重点！！！！
+		registry.addResourceHandler("/img/**")
+         .addResourceLocations("classpath:/static/img/")
+         .setCachePeriod(3600);
 	}
 
 	@Bean
@@ -183,5 +198,4 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		registrationBean.addUrlMappings("/console/*");
 		return registrationBean;
 	}
-
 }

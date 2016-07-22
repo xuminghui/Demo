@@ -10,17 +10,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.servlet.support.WebContentGenerator;
 
 import com.example.springDemo.BaseProfile;
 import com.example.springDemo.BaseService;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(excludeFilters=@ComponentScan.Filter(UsedForTesting.class)) 
+@ComponentScan(excludeFilters=@ComponentScan.Filter(UsedForTesting.class))
+//浏览servlet组件:filter,listener
+@ServletComponentScan
 public class DemoApplication {
 	private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 	//MAP注入

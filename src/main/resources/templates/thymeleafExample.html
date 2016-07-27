@@ -2,11 +2,13 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title></title>
+    <title>thymeleaf 标签功能</title> 
+   <!--  <link rel="stylesheet" th:href="${#themes.code('theme_css')}"/> --> 
 </head>
 <body>
 <form action="">
 	<input th:value="${@viewBean.showName()}"></input>
+	<p th:text="#{message}">BUG</p>
 </form>
 <!-- mvc.url的使用 -->
 <a th:href="${#mvc.url('showuri').arg(0,userName).build()}">12345

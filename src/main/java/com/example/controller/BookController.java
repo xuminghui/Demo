@@ -1,20 +1,22 @@
 package com.example.controller;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,11 +31,16 @@ import com.example.service.BookService;
 public class BookController {
 	@Autowired
 	private BookService bookService;
+	@Autowired
+	private MessageSource ms;
+/*	@Autowired
+	private Validator validator;*/
 	// 此处是在禁用了CSRF的功能后调试成功的，在开启情况下如何通过验证，有待于进一步研究
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Book create(@RequestBody @Valid @NotNull(message="12345") Book book,BindingResult result) {
+	public Book create(@RequestBody @Valid  Book book,BindingResult result) {
 		System.out.println("result.getErrorCount(): "+result.getErrorCount());
-		
+		String message=ms.getMessage("book.name.illegal", null, Locale.ENGLISH);
+		System.out.println("MESSAGE: "+message);
 		for(FieldError error:result.getFieldErrors()){
 			System.out.println(error.getField()+" : "+error.getDefaultMessage());
 		}

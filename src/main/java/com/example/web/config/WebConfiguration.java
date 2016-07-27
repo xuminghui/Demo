@@ -12,12 +12,19 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.AbstractMessageSource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.CacheControl;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.ui.context.ThemeSource;
+import org.springframework.ui.context.support.ResourceBundleThemeSource;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -29,6 +36,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.mvc.WebContentInterceptor;
 import org.springframework.web.servlet.resource.ContentVersionStrategy;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
+import org.springframework.web.servlet.theme.AbstractThemeResolver;
 
 import com.example.BookInitRunner;
 import com.example.formatter.BookFormatter;
@@ -43,15 +51,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 	@Autowired
 	private BookRepository repository;
-	/*@Autowired
-    private MessageSource messageSource;*/
+	@Autowired
+	private MessageSource messageSouce;
+	/*
+	 * @Autowired private MessageSource messageSource;
+	 */
 
-   /* @Override
-    public Validator getValidator() {
-        LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
-        factory.setValidationMessageSource(messageSource);
-        return factory;
-    }*/
+	/*
+	 * @Override public Validator getValidator() { LocalValidatorFactoryBean
+	 * factory = new LocalValidatorFactoryBean();
+	 * factory.setValidationMessageSource(messageSource); return factory; }
+	 */
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("home");
@@ -69,41 +79,48 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		registry.addFormatterForFieldType(LocalDate.class, new LocalDateFormatter());
 		registry.addFormatter(new BookFormatter(repository));
 	}
+
 	/**
 	 * 国际化配置
+	 * 
 	 * @return
 	 */
 	@Bean
 	public LocaleResolver localeResolver() {
-	    SessionLocaleResolver slr = new SessionLocaleResolver();
-	    slr.setDefaultLocale(Locale.US);
-	    return slr;
+		SessionLocaleResolver slr = new SessionLocaleResolver();
+		slr.setDefaultLocale(Locale.US);
+		return slr;
 	}
+
 	/**
 	 * 切换 param设置为lang的值
+	 * 
 	 * @return
 	 */
 	@Bean
 	public LocaleChangeInterceptor localeChangeInterceptor() {
-	    LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-	    lci.setParamName("lang");
-	    return lci;
+		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+		lci.setParamName("lang");
+		return lci;
 	}
-	
+
 	@Bean
 	public DemoInterceptor demoInterceptor() {
 		return new DemoInterceptor();
 	}
+
 	@Bean
 	public WebContentInterceptor webContentInterceptor() {
-		WebContentInterceptor webContentInterceptor= new MyInterceptor();
+		WebContentInterceptor webContentInterceptor = new MyInterceptor();
 		webContentInterceptor.setCacheSeconds(0);
-		//对于静态资源如何过滤cache-control
+		// 对于静态资源如何过滤cache-control
 		webContentInterceptor.addCacheMapping(CacheControl.maxAge(1, TimeUnit.HOURS), "/img/*");
-		//webContentInterceptor.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS));
-		
+		// webContentInterceptor.setCacheControl(CacheControl.maxAge(2,
+		// TimeUnit.HOURS));
+
 		return webContentInterceptor;
 	}
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(demoInterceptor());
@@ -169,10 +186,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		// addResourceLocations：指定一个具体的位置
 		registry.addResourceHandler("/js123/*.js").addResourceLocations("classpath:/static/js/")
 				.setCachePeriod(60 * 60 * 24 * 365).resourceChain(true).addResolver(versionResourceResolver);
-		//通过这个设置可以对静态资源进行缓存过滤 ,这个地方是重点！！！！
-		registry.addResourceHandler("/img/**")
-         .addResourceLocations("classpath:/static/img/")
-         .setCachePeriod(3600);
+		// 通过这个设置可以对静态资源进行缓存过滤 ,这个地方是重点！！！！
+		registry.addResourceHandler("/img/**").addResourceLocations("classpath:/static/img/").setCachePeriod(3600);
 	}
 
 	@Bean
@@ -182,15 +197,51 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		};
 	}
 
-	/*@Bean
-	public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
-		return new ResourceUrlEncodingFilter();
-	}*/
+	/*
+	 * @Bean public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
+	 * return new ResourceUrlEncodingFilter(); }
+	 */
 
 	@Bean
 	public BookInitRunner initData() {
 		return new BookInitRunner();
 	}
+	/**
+	 * 设置主体源
+	 * @return
+	 */
+	@Bean
+	public ThemeSource themeSource() {
+		AbstractThemeResolver a;
+		ReloadableResourceBundleMessageSource b;
+		AbstractMessageSource c;
+		ResourceBundleThemeSource themeSource = new ResourceBundleThemeSource();
+		themeSource.setBasenamePrefix("themes/");
+		return themeSource;
+	}
+	/**
+	 * message国际化 ，不需要指定下面的BEAN，只需要在application.properties中指定basenam即可spring.messages.basename
+	 * 在页面就可以通过#{}引用对应的key
+	 * @return
+	 */
+	/*@Bean
+	public MessageSource messageSource() {
+	    final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+
+	    //messageSource.setBasename("i18n/messages");
+	    messageSource.setFallbackToSystemLocale(false);
+	    messageSource.setCacheSeconds(0);
+	    return messageSource;
+	}*/ 
+	/**
+	 * 通过如下配置，成功获取了Bean对应的消息
+	 */
+	@Override
+    public Validator getValidator() {
+        LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
+        factory.setValidationMessageSource(messageSouce);
+        return factory;
+    }
 
 	@Bean
 	ServletRegistrationBean h2servletRegistration() {

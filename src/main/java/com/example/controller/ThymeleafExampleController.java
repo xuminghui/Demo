@@ -1,5 +1,9 @@
 package com.example.controller;
 
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping(value="/test")
 public class ThymeleafExampleController {
+	@Autowired
+	private MessageSource ms;
 	@RequestMapping(value = "showName", method = RequestMethod.GET)
 	public String showName() {
+		String message=ms.getMessage("message", null, Locale.ENGLISH);
+		System.out.println(message);
 		return "thymeleafExample";
 	}
 	

@@ -132,6 +132,10 @@
 			<groupId>net.sf.ehcache</groupId> <artifactId>ehcache</artifactId> </dependency> 
 			<dependency> <groupId>org.opensaml</groupId> <artifactId>opensaml</artifactId> 
 			<version>2.5.1-1</version> </dependency> -->
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

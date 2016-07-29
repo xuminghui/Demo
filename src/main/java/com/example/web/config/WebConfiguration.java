@@ -26,6 +26,7 @@ import org.springframework.ui.context.support.ResourceBundleThemeSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.ThemeResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -37,6 +38,7 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor;
 import org.springframework.web.servlet.resource.ContentVersionStrategy;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
 import org.springframework.web.servlet.theme.AbstractThemeResolver;
+import org.springframework.web.servlet.theme.FixedThemeResolver;
 
 import com.example.BookInitRunner;
 import com.example.formatter.BookFormatter;
@@ -218,6 +220,12 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		ResourceBundleThemeSource themeSource = new ResourceBundleThemeSource();
 		themeSource.setBasenamePrefix("themes/");
 		return themeSource;
+	}
+	@Bean
+	public ThemeResolver themeResolver() {
+		//好几个ThemeResolver的实现，可以实验下
+	  ThemeResolver themeResolver = new FixedThemeResolver();
+	  return themeResolver;
 	}
 	/**
 	 * message国际化 ，不需要指定下面的BEAN，只需要在application.properties中指定basenam即可spring.messages.basename

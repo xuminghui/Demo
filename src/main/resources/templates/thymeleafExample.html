@@ -1,18 +1,64 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>thymeleaf 标签功能</title> 
-   <!--  <link rel="stylesheet" th:href="${#themes.code('theme_css')}"/> --> 
+<meta charset="UTF-8" />
+<!-- #表达式来自于属性文件message  带参数的情况-->
+<title th:text="#{home.welcome(${session.user.name})}">Welcome
+	to our grocery store!</title>
+<link rel="stylesheet" th:href="@{${#themes.code('theme_css')}}" />
 </head>
 <body>
-<form action="">
-	<input th:value="${@viewBean.showName()}"></input>
-	<p th:text="#{message}">BUG</p>
-</form>
-<!-- mvc.url的使用 -->
-<a th:href="${#mvc.url('showuri').arg(0,userName).build()}">12345
-</a>
+	<div>这个引用的是themes的css</div>
+	<form action="">
+		<input th:value="${@viewBean.showName()}"></input>
+		<p th:text="#{message}">BUG</p>
+	</form>
+	<!-- mvc.url的使用 -->
+	<a th:href="${#mvc.url('showuri').arg(0,userName).build()}">12345 </a>
+
+	<div>
+		<div>
+			${execInfo.templateName}:<span th:text="${execInfo.templateName}"></span>
+		</div>
+		<br />
+		<div>
+			${execInfo.now}:<span th:text="${execInfo.now}"></span>
+		</div>
+		<!-- http://localhost:8081/springboot/test/showName?name=123&name=456
+	参数可能会有两个相同的key，所以${param.name[1]} 要这样使用
+-->
+		<div>
+			${param.name[0]}:<span th:text="${param.name[0]}"></span>
+		</div>
+		<div>
+			${session.sessionAttribute}:<span
+				th:text="${session.sessionAttribute}"></span>
+		</div>
+		<div>
+			${application.applicationContext}:<span
+				th:text="${application.applicationContext}"></span>
+		</div>
+
+		<div>
+			"th:untext": <span th:utext="#{home.utext}"></span>
+		</div>
+	</div>
+
+
+	<div>对象的遍历选择</div>
+	<div th:object="${session.user}">
+		<p>
+			Name: <span th:text="*{name}">Sebastian</span>.
+		</p>
+	</div>
+	
+	<div  th:unless="${#lists.isEmpty(colors)}"> 
+		在颜色列表存在数据的时候显示
+	</div>
+	<div  th:unless="${!#lists.isEmpty(colors)}"> 
+		在颜色列表不存在数据的时候显示
+	</div>
 
 </body>
 </html>

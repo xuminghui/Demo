@@ -1,5 +1,7 @@
 package com.example.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,10 +33,19 @@ public class BookService implements SmartInitializingSingleton{
 	public Book getBook(long id) {
 		return bookRepository.findOne(id);
 	}
-
+	public List<Book> findAllBooks() {
+		List<Book> books = bookRepository.findAll();
+		if(books.size()==0){
+			for(int i=0;i<10;i++){
+				books.add(new Book(i+"","bookName"+i,null,"remark"+i)); 
+			}
+		}
+		return books;
+	}
 	@Override
 	public void afterSingletonsInstantiated() {
 		System.out.println("实例化完成。。。。。。。。。。。。。。。。。。。。。");
 		
 	}
+	
 }

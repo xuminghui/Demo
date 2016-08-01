@@ -52,13 +52,38 @@
 			Name: <span th:text="*{name}">Sebastian</span>.
 		</p>
 	</div>
-	
-	<div  th:unless="${#lists.isEmpty(colors)}"> 
-		在颜色列表存在数据的时候显示
-	</div>
-	<div  th:unless="${!#lists.isEmpty(colors)}"> 
-		在颜色列表不存在数据的时候显示
-	</div>
 
+
+	<div th:unless="${!#lists.isEmpty(colors)}">在颜色列表不存在数据的时候显示</div>
+
+	<!-- 列表 <ol> 有序列表  <ul> 无序列表 -->
+	<ol>
+		<li th:each="color:${colors}"><span th:text="${color}">颜色</span>
+		</li>
+
+
+	</ol>
+	<div th:unless="${#lists.isEmpty(allBooks)}">
+		<h2 th:text="#{title.list}">List of Seed Starters</h2>
+		<table>
+			<thead>
+				<tr>
+					<th th:text="#{seedstarter.datePlanted}">Date Planted</th>
+					<th th:text="#{seedstarter.covered}">Covered</th>
+					<th th:text="#{seedstarter.covered}">Covered</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="apple : ${allApples}">
+				<!-- thymeleaf的日期格式化 -->
+					<td th:text="${#dates.format(apple.createTime, 'yyyy-MM-dd HH:mm:ss')}">13/01/2011</td>
+					<td th:text="${apple.name}">123</td>
+					<td th:text="${{apple.sex}}">123</td>
+					<td th:text="${{apple.createTime}}">13/01/2011</td>
+					<td th:text="${{apple.currency}}">13/01/2011</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

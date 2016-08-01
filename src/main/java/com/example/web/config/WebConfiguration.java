@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.CacheControl;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.ui.context.ThemeSource;
@@ -42,6 +41,7 @@ import org.springframework.web.servlet.theme.FixedThemeResolver;
 
 import com.example.BookInitRunner;
 import com.example.formatter.BookFormatter;
+import com.example.formatter.String2SexConvertor;
 import com.example.repository.BookRepository;
 import com.example.web.filter.SomeFilter;
 import com.example.web.interceptor.DemoInterceptor;
@@ -77,9 +77,13 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
-		registry.addFormatter(new DateFormatter());// 必须显示的指定，才能转换
+		//spring boot已经内置了dataFormatter和numberFormmater
+		//这里可以增加formatter和converter两种
+		//registry.addFormatter(new DateFormatter());// 必须显示的指定，才能转
+		//registry.addFormatter(new DateFormatter());
 		registry.addFormatterForFieldType(LocalDate.class, new LocalDateFormatter());
 		registry.addFormatter(new BookFormatter(repository));
+		registry.addConverter(new String2SexConvertor());
 	}
 
 	/**

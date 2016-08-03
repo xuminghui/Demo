@@ -19,7 +19,9 @@ public class Apple implements Serializable{
 	//
 	//或者通过thymeleaf的#dates的工具类执行也可以
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime; 
+	private Date createTime;
+	
+	private List<Row> rows=new ArrayList<Row>();
 	
 	private SEX  sex;
 	//此处不需要初始化  ，页面传递过来的数值会覆盖默认的值的。也会报空指针；所以要在controller判断一下是否为null
@@ -69,6 +71,12 @@ public class Apple implements Serializable{
 	}
 	public void setColors(List<Color> colors) {
 		this.colors = colors;
+	}
+	public List<Row> getRows() {
+		return rows;
+	}
+	public void setRows(List<Row> rows) {
+		this.rows = rows;
 	}
 	
 	

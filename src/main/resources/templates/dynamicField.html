@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+</head>
+<body>
+	<div>
+	<form action="#" th:action="@{/test/dynamic}" th:object="${apple}"
+			method="post">
+		<table>
+			<thead>
+				<tr>
+					<th th:text="row">Row</th>
+					<th th:text="id">Variety</th>
+					<th th:text="name">Seeds per
+						cell</th>
+					<th>
+						<button type="submit" name="addRow"
+							th:text="addrow">Add row</button>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="row,rowStat : *{rows}">
+					<td th:text="${rowStat.count}">1</td>
+					<td><select th:field="*{rows[__${rowStat.index}__].rowId}">
+							<option th:each="color : ${colors}" th:value="${color}"
+								th:text="${color}">Thymus Thymi</option>
+					</select></td>
+					<td><input type="text"
+						th:field="*{rows[__${rowStat.index}__].name}" /></td>
+					<td>
+						<button type="submit" name="removeRow" th:value="${rowStat.index}"
+							th:text="removeRow">Remove row</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+</body>
+</html>

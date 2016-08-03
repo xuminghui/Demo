@@ -68,22 +68,69 @@
 		<table>
 			<thead>
 				<tr>
-					<th th:text="#{seedstarter.datePlanted}">Date Planted</th>
-					<th th:text="#{seedstarter.covered}">Covered</th>
-					<th th:text="#{seedstarter.covered}">Covered</th>
+					<th th:text="#{apple.dateTime}">Date Planted</th>
+					<th th:text="#{apple.name}">Covered</th>
+					<th th:text="#{apple.sex}">Covered</th>
+					<th th:text="#{apple.hasReached}">hasReached</th>
+					<th th:text="#{apple.saleTime}">Covered</th>
+					<th th:text="#{apple.price}">Covered</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="apple : ${allApples}">
-				<!-- thymeleaf的日期格式化 -->
-					<td th:text="${#dates.format(apple.createTime, 'yyyy-MM-dd HH:mm:ss')}">13/01/2011</td>
+					<!-- thymeleaf的日期格式化 -->
+					<td th:text="${#dates.format(apple.createTime, 'yyyy-MM-dd')}">13/01/2011</td>
 					<td th:text="${apple.name}">123</td>
 					<td th:text="${{apple.sex}}">123</td>
+					<td th:text="${apple.hasReached}?#{bool.true}:#{bool.false}">123</td>
 					<td th:text="${{apple.createTime}}">13/01/2011</td>
 					<td th:text="${{apple.currency}}">13/01/2011</td>
 				</tr>
 			</tbody>
 		</table>
+	</div>
+
+
+	<div>
+		<h2 th:text="FORM"></h2>
+		<form action="#" th:action="@{/test/saveApple}" th:object="${apple}"
+			method="post">
+			<div>
+				<label th:for="createTime" th:text="#{apple.dateTime}+':'">apple.dateTime</label>
+				<input type="text" th:field="*{createTime}" />
+			</div>
+			<div>
+				<label th:for="${#ids.next('hasReached')}"
+					th:text="#{apple.hasReached}">Covered</label> <input
+					type="checkbox" th:field="*{hasReached}" />
+			</div>
+			<div>
+				<!-- 有${{}}的就是要通过conversionService转换的 ，${}：这种方式是将对象调用toString获得的值-->
+				<ul>
+					<li th:each="color : ${colors}"><input type="checkbox"
+						th:field="*{colors}" th:value="${{color}}" /> <label
+						th:for="${#ids.prev('colors')}" th:text="${color}">Heating</label></li>
+				</ul>
+			</div>
+			<div>
+				<ul>
+					<li th:each="sex : ${allSexs}"><input type="radio"
+						th:field="*{sex}" th:value="${sex}" /> <label
+						th:for="${#ids.prev('sex')}" th:text="${{sex}}">Wireframe</label></li>
+				</ul>
+
+			</div>
+			<div>
+				<select th:field="*{color}">
+					<option th:each="color : ${colors}" th:value="${{color}}"
+						th:text="${color}">Wireframe</option>
+				</select>
+
+			</div>
+			<div>
+				<button type="submit" name="saveApple" th:text="保存">Add row</button>
+			</div>
+		</form>
 	</div>
 </body>
 </html>

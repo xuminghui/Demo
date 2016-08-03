@@ -1,14 +1,16 @@
 package com.example.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 
+import com.example.enu.Color;
 import com.example.enu.SEX;
-import com.thoughtworks.xstream.converters.extended.CurrencyConverter;
 
 public class Apple implements Serializable{
 	private String name;
@@ -16,10 +18,14 @@ public class Apple implements Serializable{
 	//通过thymeleaf的双括号${{apple.createTime}}，再根据这个注解即可完成.不需要在config中指定formatter(应该是spring boot自动已经注入了)
 	//
 	//或者通过thymeleaf的#dates的工具类执行也可以
-	@DateTimeFormat(pattern = "HH:mm:ss")
-	private Date createTime;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime; 
 	
 	private SEX  sex;
+	//此处不需要初始化  ，页面传递过来的数值会覆盖默认的值的。也会报空指针；所以要在controller判断一下是否为null
+	private List<Color> colors; 
+	
+	private boolean hasReached;
 	@NumberFormat(style=Style.CURRENCY/*,pattern="#,###.##"*/)
 	private double currency;
 	public String getName() {
@@ -52,6 +58,19 @@ public class Apple implements Serializable{
 	public void setCurrency(double currency) {
 		this.currency = currency;
 	}
+	public boolean isHasReached() {
+		return hasReached;
+	}
+	public void setHasReached(boolean hasReached) {
+		this.hasReached = hasReached;
+	}
+	public List<Color> getColors() {
+		return colors;
+	}
+	public void setColors(List<Color> colors) {
+		this.colors = colors;
+	}
+	
 	
 	
 	

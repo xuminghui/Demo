@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,8 +37,18 @@ public class ThymeleafExampleController {
 	private MessageSource ms;
 	@Autowired
 	private BookService bookService;
-
-	@RequestMapping(value = "showName", method = RequestMethod.GET)
+	
+	/**
+	 * params 通过参数名来区分不同的URL
+	 * 例如：
+	 * test?addRow=123
+	 * test?removeRow=123
+	 * 这两个参数是不同的，对应的controller的方法也是不同的
+	 * @param name
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "showName", method = RequestMethod.GET,params={})
 	public String showName(@RequestParam String name, HttpServletRequest request) {
 		User user = new User(1l, "xiaodingdang");
 		request.getSession().setAttribute("sessionAttribute", "this is sessionAttribute");
@@ -52,10 +63,22 @@ public class ThymeleafExampleController {
 		return "testAny";
 	}
 
-	@ModelAttribute("colors")
-	public List<String> getColors() {
+	@RequestMapping(value = "saveApple", method = RequestMethod.POST)
+	public String showName(final Apple apple, final BindingResult bindingResult, final HttpServletRequest req) {
+		System.out.println(apple.getColors()+" "+apple.getCreateTime());
+		return "redirect:showName?name=123";
+	}
 
-		return Arrays.asList(Color.GREEN.getName(), Color.RED.getName(), Color.YELLOW.getName());
+	@ModelAttribute("colors")
+	public List<Color> getColors() {
+
+		return Arrays.asList(Color.GREEN, Color.RED, Color.YELLOW);
+	}
+
+	@ModelAttribute("allSexs")
+	public List<SEX> getSexs() {
+
+		return Arrays.asList(SEX.Female, SEX.Male, SEX.Unknown);
 	}
 
 	// 不是直接请求页面的URL，通过ModelAttribute来获得页面的数据
@@ -68,17 +91,23 @@ public class ThymeleafExampleController {
 	//
 	@ModelAttribute("allApples")
 	public List<Apple> populateAllApples() {
-		List<Apple> apples=new ArrayList<Apple>();
-		for(int i=0;i<10;i++){
-			Apple apple=new Apple();
-			apple.setColor("red"+i);
-			apple.setName("name"+i);
-			apple.setSex(SEX.Female);
+		List<Apple> apples = new ArrayList<Apple>();
+		for (int i = 0; i < 10; i++) {
+			Apple apple = new Apple();
+			apple.setColor("red" + i);
+			apple.setName("name" + i);
+			apple.setSex(i % 2 == 0 ? SEX.Female : SEX.Male);
+			apple.setHasReached(i % 2 == 0 ? true : false);
 			apple.setCurrency(234927349724.22);
 			apple.setCreateTime(new Date());
 			apples.add(apple);
 		}
-		
+
 		return apples;
+	}
+
+	@ModelAttribute("apple")
+	public Apple createApple() {
+		return new Apple();
 	}
 }

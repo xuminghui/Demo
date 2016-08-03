@@ -46,7 +46,6 @@ public enum SEX {
 
     @Override
     public String toString() {
-    	System.out.println("toString");
         return this.value;
     }
 

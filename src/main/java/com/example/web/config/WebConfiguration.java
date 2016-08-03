@@ -41,7 +41,8 @@ import org.springframework.web.servlet.theme.FixedThemeResolver;
 
 import com.example.BookInitRunner;
 import com.example.formatter.BookFormatter;
-import com.example.formatter.String2SexConvertor;
+import com.example.formatter.ColorFormatter;
+import com.example.formatter.SexFormatter;
 import com.example.repository.BookRepository;
 import com.example.web.filter.SomeFilter;
 import com.example.web.interceptor.DemoInterceptor;
@@ -83,7 +84,9 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		//registry.addFormatter(new DateFormatter());
 		registry.addFormatterForFieldType(LocalDate.class, new LocalDateFormatter());
 		registry.addFormatter(new BookFormatter(repository));
-		registry.addConverter(new String2SexConvertor());
+		//registry.addConverter(new String2SexConvertor());
+		registry.addFormatter(new SexFormatter());
+		registry.addFormatter(new ColorFormatter());
 	}
 
 	/**

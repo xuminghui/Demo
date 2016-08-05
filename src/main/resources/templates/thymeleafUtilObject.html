@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+</head>
+<body>
+
+	<div th:if="${@thymeleafService.isOK()} == true">
+		${@thymeleafService.isOK()} == true</div>
+	<div th:if="${@thymeleafService.returnNull()} == null">
+		${@thymeleafService.returnNull()} == null</div>
+
+	<div>
+		${#httpServletRequest.getAttribute('orderId')}:<span
+			th:text="${#httpServletRequest.getAttribute('orderId')}"></span>
+	</div>
+	<div>
+		${#httpServletRequest.getContextPath():<span
+			th:text="${#httpServletRequest.getContextPath()}"></span>
+	</div>
+
+	<div>
+		<a href="details.html"
+			th:href="@{/test/{orderId}/details(orderId=${#httpServletRequest.getAttribute('orderId')})}">@{/test/{orderId}/details(orderId=${#httpServletRequest.getAttribute('orderId')})}</a>
+	</div>
+	<div>
+		<a href="details.html"
+			th:href="@{/order/details(orderId=${#httpServletRequest.getAttribute('orderId')})}">@{/order/details(orderId=${#httpServletRequest.getAttribute('orderId')})}</a>
+	</div>
+	<div>
+		<a href="details.html"
+			th:href="@{/order/process(execId='12',execType='FAST')}">@{/order/process(execId='12',execType='FAST')}</a>
+	</div>
+
+	<div>
+		#dates.createNow():<span
+			th:text="${#dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm:ss')}"></span>
+	</div>
+
+	<div>
+		<p>
+			'working web application' : <span th:text="'working web application'">template
+				file</span>.
+		</p>
+
+		<p>
+			'\'working web application\'' : <span
+				th:text="'\'working web application\''">template file</span>.
+		</p>
+
+		<p>
+			"|working web application|" : <span
+				th:text="|working web application|">template file</span>.
+		</p>
+	</div>
+
+	<div th:with="orderId=${#httpServletRequest.getAttribute('orderId')}">
+		<p>
+			(声明本地变量)th:with="orderId=${#httpServletRequest.getAttribute('orderId')}" :  <span th:text="${orderId}">Julius
+				Caesar</span>.
+		</p>
+	</div>
+
+
+</body>
+</html>

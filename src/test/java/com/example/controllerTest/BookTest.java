@@ -28,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.concurrent.ListenableFuture;
@@ -41,6 +42,7 @@ import com.example.MockBeansConfig;
 import com.example.entity.Author;
 import com.example.entity.Book;
 import com.example.repository.BookRepository;
+import com.example.util.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -130,8 +132,13 @@ public class BookTest {
 
 	@Test
 	public void webappGetBookApi() throws Exception {
-		mockMvc.perform(get("/books/0")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString())).andDo(MockMvcResultHandlers.print()).andExpect(jsonPath("$.id").value(0));
+		MvcResult mvcResult=mockMvc.perform(get("/books/0")).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8.toString())).andDo(MockMvcResultHandlers.print()).andExpect(jsonPath("$.id").value(0)).andReturn();
+		String content = mvcResult.getResponse().getContentAsString();
+		Book book = JSONUtil.JSONToObj(content,Book.class);
+		System.out.println(book.getBookName());
+		System.out.println(JSONUtil.objectToJson(book));
+		JSON.toJSONStringWithDateFormat(date, "yyyy-MM-ddHH:mm:ss.SSS");
 	}
 
 	/**

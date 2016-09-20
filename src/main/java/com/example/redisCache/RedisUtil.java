@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class RedisUtil {
 	@SuppressWarnings("rawtypes")
 	@Autowired
-	private RedisTemplate redisTemplate;
+	private RedisTemplate<String,String> redisTemplate;
 
 	/**
 	 * 批量删除对应的value
@@ -37,7 +37,7 @@ public class RedisUtil {
 	 * @param pattern
 	 */
 	public void removePattern(final String pattern) {
-		Set<Serializable> keys = redisTemplate.keys(pattern);
+		Set<String> keys = redisTemplate.keys(pattern);
 		if (keys.size() > 0)
 			redisTemplate.delete(keys);
 	}
@@ -71,7 +71,7 @@ public class RedisUtil {
 	 */
 	public Object get(final String key) {
 		Object result = null;
-		ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		result = operations.get(key);
 		return result;
 	}
@@ -83,10 +83,10 @@ public class RedisUtil {
 	 * @param value
 	 * @return
 	 */
-	public boolean set(final String key, Object value) {
+	public boolean set(final String key, String value) {
 		boolean result = false;
 		try {
-			ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+			ValueOperations<String, String> operations = redisTemplate.opsForValue();
 			operations.set(key, value);
 			result = true;
 		} catch (Exception e) {
@@ -102,10 +102,10 @@ public class RedisUtil {
 	 * @param value
 	 * @return
 	 */
-	public boolean set(final String key, Object value, Long expireTime) {
+	public boolean set(final String key, String value, Long expireTime) {
 		boolean result = false;
 		try {
-			ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+			ValueOperations<String, String> operations = redisTemplate.opsForValue();
 			operations.set(key, value);
 			redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
 			result = true;
